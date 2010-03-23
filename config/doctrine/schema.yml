@@ -1,0 +1,32 @@
+User:
+  actAs: [Timestampable]
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    username:
+      type: string(128)
+      notnull: true
+      unique: true
+    email:
+      type: string(128)
+      notnull: true
+      unique: true	
+    algorithm:
+      type: string(128)
+      default: sha1
+      notnull: true
+    salt: string(128)
+    password: string(128)
+    is_active:
+      type: boolean
+      default: 1
+    is_admin:
+      type: boolean
+      default: false
+    last_login:
+      type: timestamp
+  indexes:
+    is_active_idx:
+      fields: [is_active]

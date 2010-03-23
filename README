@@ -1,0 +1,23 @@
+h1. doAuthPlugin
+Basic authorization plugin
+
+h2. Current features
+* only one model: User. Easily applies to project. Simplifies project models logic.
+* user validation (as in sfGuard)
+* remember filter (uses hashes stored in cookies), not uses additional tables.
+
+h2. Plans (differences from sfGuard)
+* push all needed user functionality into User model
+* add support for emails
+* send validation message by email
+* send email when user forgot password
+* registration form
+
+* permission groups
+* permission templates
+* group profiles
+* mail notifications integration (user and group)
+* access logging
+* current user sessions statistics with interrupt functionality
+* system user notifications 
+
