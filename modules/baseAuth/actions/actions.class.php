@@ -1,6 +1,4 @@
 <?php
-require_once(dirname(__FILE__).'/../lib/doAuthActions.class.php');
-
 /**
  *
  * @package    symfony

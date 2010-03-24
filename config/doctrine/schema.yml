@@ -12,7 +12,7 @@ User:
     email:
       type: string(128)
       notnull: true
-      unique: true	
+      unique: true
     algorithm:
       type: string(128)
       default: sha1
@@ -21,12 +21,36 @@ User:
     password: string(128)
     is_active:
       type: boolean
-      default: 1
-    is_admin:
+      default: 0
+    is_super_admin:
       type: boolean
       default: false
     last_login:
       type: timestamp
   indexes:
-    is_active_idx:
-      fields: [is_active]
+    name_idx:
+      fields: [username]
+      unique: true
+    email_idex:
+      fields: [email]
+      unique: true
+
+UserActivationCode:
+  actAs: [Timestampable]
+  options:
+    symfony:
+      form:   false
+      filter: false
+  columns:
+    user_id:
+      type: integer
+      primary: true
+    code:
+      type: string(128)
+  relations:
+    User:
+      class: User
+      foreign: id
+      local: user_id
+      type: one
+      onDelete: cascade

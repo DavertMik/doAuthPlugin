@@ -9,7 +9,7 @@ class doAuthRememberMeFilter extends sfFilter
    */
   public function execute($filterChain)
   {
-    $cookieName = sfConfig::get('app_auth_remember_cookie_name', 'doRemember');
+    $cookieName = sfConfig::get('app_doAuth_remember_cookie_name', 'doRemember');
 
     if ($this->isFirstCall() && $this->context->getUser()->isAnonymous() && $cookie = $this->context->getRequest()->getCookie($cookieName)) {
       

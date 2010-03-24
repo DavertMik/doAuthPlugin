@@ -37,7 +37,7 @@ abstract class PluginUser extends BaseUser
     $modified = $this->getModified();
     if ((!$algorithm = $this->getAlgorithm()) || (isset($modified['algorithm']) && $modified['algorithm'] == $this->getTable()->getDefaultValueOf('algorithm')))
     {
-      $algorithm = sfConfig::get('app_user_algorithm_callable', 'sha1');
+      $algorithm = sfConfig::get('app_doAuth_algorithm_callable', 'sha1');
     }
     $algorithmAsStr = is_array($algorithm) ? $algorithm[0].'::'.$algorithm[1] : $algorithm;
     if (!is_callable($algorithm))
@@ -57,7 +57,7 @@ abstract class PluginUser extends BaseUser
    */
   public function checkPassword($password)
   {
-    if ($callable = sfConfig::get('app_user_check_password_callable'))
+    if ($callable = sfConfig::get('app_doAuth_check_password_callable'))
     {
       return call_user_func_array($callable, array($this->getUsername(), $password, $this));
     }

@@ -1,0 +1,36 @@
+app:
+  doAuth:
+    # password encrypting algorythm
+    algorithm_callable: sha1
+    # function for delegating password check
+    check_password_callable: false
+    # coookie 
+    remember_cookie:
+      name: doRemember
+      # expiration time (in secs), currently 1 year
+      expiration_age: 31536000
+      
+    register:
+      # where to redirect valid user after registration
+      redirect_path: '@homepage'
+      # auto sign in after registration
+      sign_in: true
+      
+    # use user activation
+    activation: false
+
+    email:
+      # activate by email if activation is on
+      activation: true
+      # send registration notification
+      registration: true
+      # sender email
+      from: mailer@currenthost.com
+
+    signin:
+      # signin redirect
+      url: '@homepage'
+
+    signout:
+      #signout url
+      url: '@homepage'

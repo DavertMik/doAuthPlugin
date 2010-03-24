@@ -1,10 +1,12 @@
 <?php
-/**
+/*
+ * This file is part of the symfony package.
+ * (c) 2004-2006 Fabien Potencier <fabien.potencier@symfony-project.com>
  *
- * @package    symfony
- * @subpackage plugin
- * @author     davert <davert@ukr.net>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
+
 class doAuthSecurityUser extends sfBasicSecurityUser
 {
   protected $user = null;
@@ -128,9 +130,9 @@ class doAuthSecurityUser extends sfBasicSecurityUser
       $hash = base64_encode(serialize(array($user->getUsername(),md5(rand()),doAuthTools::rememberHash($user))));
       $context = sfContext::getInstance();      
 
-      $expiration_age = sfConfig::get('app_user_remember_key_expiration_age', 15 * 24 * 3600);
+      $expiration_age = sfConfig::get('app_doAuth_remember_key_expiration_age', 15 * 24 * 3600);
       // make key as a cookie
-      $remember_cookie = sfConfig::get('app_user_remember_cookie_name', 'doRemember');
+      $remember_cookie = sfConfig::get('app_doAuth_remember_cookie_name', 'doRemember');
       sfContext::getInstance()->getResponse()->setCookie($remember_cookie, $hash, time() + $expiration_age);
     }
   }
