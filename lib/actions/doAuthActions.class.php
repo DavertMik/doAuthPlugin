@@ -7,7 +7,7 @@ class doAuthActions extends sfActions {
       return $this->redirect('@homepage');
     }
 
-    $this->form = new SigninUserForm();
+    $this->form = new SigninForm();
 
     if ($request->isMethod('post')) {
       $this->form->bind($request->getParameter('signin'));
@@ -102,7 +102,24 @@ class doAuthActions extends sfActions {
     $this->redirect(sfConfig::get('app_doAuth_register_redirect','@homepage'));
   }
 
-  private function freshSignin() {
+  public function executeSecure($request) {
+    $this->getResponse()->setStatusCode(403);
+  }
+
+  public function executeResetPassword($request) {
+    // i like how it is made in sfGuardUser: =)
+    // throw new sfException('This method is not yet implemented.');
+
+    
+
+  }
+
+  /**
+   *
+   * Automaticaly signs in current user after registration 
+   */
+
+  protected function freshSignin() {
     
     if (sfConfig::get('app_doAuth_register_sign_in',true)) {
       $this->getUser()->signIn($this->user);
@@ -113,11 +130,5 @@ class doAuthActions extends sfActions {
 
   }
 
-  public function executeSecure($request) {
-    $this->getResponse()->setStatusCode(403);
-  }
 
-  public function executePassword($request) {
-    throw new sfException('This method is not yet implemented.');
-  }
 }

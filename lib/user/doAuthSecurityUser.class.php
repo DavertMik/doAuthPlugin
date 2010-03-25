@@ -135,6 +135,8 @@ class doAuthSecurityUser extends sfBasicSecurityUser
       $remember_cookie = sfConfig::get('app_doAuth_remember_cookie_name', 'doRemember');
       sfContext::getInstance()->getResponse()->setCookie($remember_cookie, $hash, time() + $expiration_age);
     }
+
+    $this->dispatcher->notify(new sfEvent($this, 'user.signed_in'));
   }
 
   /**

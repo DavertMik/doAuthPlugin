@@ -26,13 +26,9 @@ class doAuthValidatorUser extends sfValidatorBase
     $password = isset($values[$this->getOption('password_field')]) ? $values[$this->getOption('password_field')] : '';
 
     // user exists?
-    if ($username && $user = $this->getTable()->retrieveByUsername($username))
+    if ($username && $user = $this->getTable()->getAuthenticatedUser($username, $password))
     {
-      // password is ok?
-      if ($user->getIsActive() && $user->checkPassword($password))
-      {
-        return array_merge($values, array('user' => $user));
-      }
+      return array_merge($values, array('user' => $user));
     }
 
     if ($this->getOption('throw_global_error'))
