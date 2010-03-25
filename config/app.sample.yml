@@ -1,6 +1,6 @@
 all:
   doAuth:
-    # password encrypting algorythm
+    # password encrypting algorithm
     algorithm_callable: sha1
     # function for delegating password check
     check_password_callable: false
@@ -18,6 +18,10 @@ all:
       
     # use user activation
     activation: false
+
+    reset_password:
+      # where to redirect after request for password reset
+      url: '@homepage'
 
     email:
       # activate by email if activation is on

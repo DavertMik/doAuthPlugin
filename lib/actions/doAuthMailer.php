@@ -48,7 +48,29 @@ class doAuthMailer {
       $controller->getPartial(sfConfig::get('app_doAuth_email_module',$controller->getModuleName()).'/mail_registration', array('user'=> $controller->user, 'password'=> $controller->getUser()->getAttribute('password',null,'doUser'))),'text/plain');
   }
 
-  
+  public static function sendPasswordRequest(sfController $controller, User $user) {
 
+    $subject = sfConfig::get('sf_i18n') ? $controller->getContext()->getI18N()->__('Password reset') :'Password reset';
+
+    $code = doAuthTools::passwordResetCode($user);
+
+    $controller->getMailer()->composeAndSend(
+      sfConfig::get('app_doAuth_email_from','mailer@'.$controller->getRequest()->getHost()),
+      array($user->getEmail() => $user->getUsername()),
+      $subject,
+      $controller->getPartial(sfConfig::get('app_doAuth_email_module',$controller->getModuleName()).'/mail_reset_password', array('user'=> $controller->user, 'code'=> $code)),'text/plain');
+  }
+
+  public static function sendNewPassword(sfController $controller, User $user, $password) {
+
+    $subject = sfConfig::get('sf_i18n') ? $controller->getContext()->getI18N()->__('Your new password') :'Your new password';
+
+    $controller->getMailer()->composeAndSend(
+      sfConfig::get('app_doAuth_email_from','mailer@'.$controller->getRequest()->getHost()),
+      array($user->getEmail() => $user->getUsername()),
+      $subject,
+      $controller->getPartial(sfConfig::get('app_doAuth_email_module',$controller->getModuleName()).'/mail_new_password', array('user'=> $controller->user, 'password'=> $password)),'text/plain');
+  }
+  
 }
 ?>

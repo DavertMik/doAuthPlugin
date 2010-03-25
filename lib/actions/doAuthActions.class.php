@@ -59,8 +59,7 @@ class doAuthActions extends sfActions {
         $this->getUser()->setAttribute('password',$this->form->getValue('password'),'doUser');
         $this->user = $user;
 
-        $event = new sfEvent($this, 'user.registered');
-        $this->dispatcher->notify($event);
+        $this->dispatcher->notify(new sfEvent($this, 'user.registered'));
 
         if (!sfConfig::get('app_doAuth_activation',false)) {
           $user->setIsActive(1);
@@ -74,9 +73,7 @@ class doAuthActions extends sfActions {
   }
 
   public function executeActivate(sfWebRequest $request) {
-     
-    
-
+         
     $activation = Doctrine::getTable('UserActivationCode')->createQuery('a')->
       innerJoin('a.User u')->
       where('a.code = ?', $request->getParameter('code'))->fetchOne();
@@ -93,8 +90,7 @@ class doAuthActions extends sfActions {
 
     $this->user = $user;
 
-    $event = new sfEvent($this, 'user.activated');
-    $this->dispatcher->notify($event);
+    $this->dispatcher->notify(new sfEvent($this, 'user.activated'));
 
     $this->getUser()->getAttributeHolder()->removeNamespace('doUser');
     $this->freshSignin();
@@ -106,12 +102,35 @@ class doAuthActions extends sfActions {
     $this->getResponse()->setStatusCode(403);
   }
 
-  public function executeResetPassword($request) {
+  public function executeResetPassword(sfWebRequest $request) {
     // i like how it is made in sfGuardUser: =)
     // throw new sfException('This method is not yet implemented.');
-
     
+    if ($request->hasParameter('user')) {      
+      $user = Doctrine::getTable('User')->createQuery()->find($request->getParameter('user'));
+      $this->forward404Unless($user);
+      if ($request->getParameter('code') != doAuthTools::passwordResetCode($user)) {
+        $this->getUser()->setFlash('error','Password reset code is invalid');
+        $this->forward404();        
+      }
+      $password = doAuthTools::generatePassword();
+      doAuthMailer::sendNewPassword($this,$user,$password);
+      $user->setPassword($password);
+      $user->save();
+      $this->getUser()->setFlash('notice','We have sent a new password on your email');
+      $this->redirect(sfConfig::get('app_doAuth_reset_password_url', '@homepage'));
+    }
 
+    $this->form = new ResetPasswordForm();
+
+    if ($request->isMethod('post')) {
+      $this->form->bind($request->getParameter('password_reset'));
+      if ($this->form->isValid()) {
+        doAuthMailer::sendPasswordRequest($this,$user);
+        $this->getUser()->setFlash('notice','You have requested a new password. Please, check your email and follow the instructions.');
+        $this->redirect(sfConfig::get('app_doAuth_reset_password_url', '@homepage'));
+      }
+    }   
   }
 
   /**

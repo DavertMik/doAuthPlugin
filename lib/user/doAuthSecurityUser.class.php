@@ -152,6 +152,7 @@ class doAuthSecurityUser extends sfBasicSecurityUser
     $expiration_age = sfConfig::get('app_doAuth_remember_key_expiration_age', 15 * 24 * 3600);
     $remember_cookie = sfConfig::get('app_doAuth_remember_cookie_name', 'doRemember');
     sfContext::getInstance()->getResponse()->setCookie($remember_cookie, '', time() - $expiration_age);
+    $this->dispatcher->notify(new sfEvent($this, 'user.signed_out'));
   }
 
   /**
