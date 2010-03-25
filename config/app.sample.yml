@@ -1,4 +1,4 @@
-app:
+all:
   doAuth:
     # password encrypting algorythm
     algorithm_callable: sha1
@@ -26,6 +26,9 @@ app:
       registration: true
       # sender email
       from: mailer@currenthost.com
+      # module where email partials are stored.
+      # default is module from controller
+      module: false
 
     signin:
       # signin redirect

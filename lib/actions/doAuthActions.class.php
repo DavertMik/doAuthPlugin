@@ -56,32 +56,35 @@ class doAuthActions extends sfActions {
         $user->setPassword($this->form->getValue('password'));
         $user->save();
 
+        $this->getUser()->setAttribute('password',$this->form->getValue('password'),'doUser');
         $this->user = $user;
+
         $event = new sfEvent($this, 'user.registered');
         $this->dispatcher->notify($event);
 
-        if (!sfConfig::get('app_user_activation',false)) {
+        if (!sfConfig::get('app_doAuth_activation',false)) {
           $user->setIsActive(1);
           $user->save();
           $this->freshSignin();
         }
 
-        $this->redirect(sfConfig::get('app_user_register_redirect','@homepage'));
+        $this->redirect(sfConfig::get('app_doAuth_register_redirect','@homepage'));
       }
     }
   }
 
   public function executeActivate(sfWebRequest $request) {
-
-    // check stored in session activation data
-    $this->forward404Unless($this->getUser()->getAttribute('activation_code','doAuth') == $activation->getCode());
-    $this->getUser()->getAttributeHolder()->removeNamespace('doUser');
+     
+    
 
     $activation = Doctrine::getTable('UserActivationCode')->createQuery('a')->
-      innerJoin('a.User u', $params)->
+      innerJoin('a.User u')->
       where('a.code = ?', $request->getParameter('code'))->fetchOne();
 
     $this->forward404Unless($activation,'wrong activation code used');
+
+    // check stored in session activation data
+    $this->forward404Unless($this->getUser()->getAttribute('activation_code',null,'doUser') == $request->getParameter('code'),'wrong session activation code');   
 
     $user = $activation->getUser();
     $user->setIsActive(1);
@@ -93,9 +96,10 @@ class doAuthActions extends sfActions {
     $event = new sfEvent($this, 'user.activated');
     $this->dispatcher->notify($event);
 
+    $this->getUser()->getAttributeHolder()->removeNamespace('doUser');
     $this->freshSignin();
 
-    $this->redirect(sfConfig::get('app_user_register_redirect','@homepage'));
+    $this->redirect(sfConfig::get('app_doAuth_register_redirect','@homepage'));
   }
 
   private function freshSignin() {

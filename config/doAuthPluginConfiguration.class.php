@@ -21,11 +21,11 @@ class doAuthPluginConfiguration extends sfPluginConfiguration {
       $this->dispatcher->connect('user.registered', array('doAuthMailer', 'sendRegistration'));
     }
 
-    if (sfConfig::get('app_doAuth_activation',false) && sfConfig::get('app_doAuth_email_activation',false)) {
+    if (sfConfig::get('app_doAuth_activation',false) && sfConfig::get('app_doAuth_email_activation',true)) {
         $this->dispatcher->connect('user.registered', array('doAuthMailer', 'sendActivation'));
         
         if (sfConfig::get('app_doAuth_email_registration', true)) {
-          $this->dispatcher->connect('user.activated', array('doAuthMailer', 'sendRegistrtation'));
+          $this->dispatcher->connect('user.activated', array('doAuthMailer', 'sendRegistration'));
         }
     }
   }

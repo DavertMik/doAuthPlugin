@@ -147,8 +147,8 @@ class doAuthSecurityUser extends sfBasicSecurityUser
     $this->user = null;
     $this->clearCredentials();
     $this->setAuthenticated(false);
-    $expiration_age = sfConfig::get('app_user_remember_key_expiration_age', 15 * 24 * 3600);
-    $remember_cookie = sfConfig::get('app_user_remember_cookie_name', 'doRemember');
+    $expiration_age = sfConfig::get('app_doAuth_remember_key_expiration_age', 15 * 24 * 3600);
+    $remember_cookie = sfConfig::get('app_doAuth_remember_cookie_name', 'doRemember');
     sfContext::getInstance()->getResponse()->setCookie($remember_cookie, '', time() - $expiration_age);
   }
 
@@ -195,25 +195,5 @@ class doAuthSecurityUser extends sfBasicSecurityUser
     return $this->getAccount()->getUsername();
   }
 
-  /**
-   * Sets the user's password.
-   *
-   * @param string $password The password
-   * @param Doctrine_Collection $con A Doctrine_Connection object
-   */
-  public function setPassword($password, $con = null)
-  {
-    $this->getAccount()->setPassword($password);
-    $this->getAccount()->save($con);
-  }
 
-  /**
-   * Returns whether or not the given password is valid.
-   *
-   * @return boolean
-   */
-  public function checkPassword($password)
-  {
-    return $this->getAccount()->checkPassword($password);
-  }
 }
