@@ -130,7 +130,7 @@ class doAuthSecurityUser extends sfBasicSecurityUser
       $hash = base64_encode(serialize(array($user->getUsername(),md5(rand()),doAuthTools::rememberHash($user))));
       $context = sfContext::getInstance();      
 
-      $expiration_age = sfConfig::get('app_doAuth_remember_key_expiration_age', 15 * 24 * 3600);
+      $expiration_age = sfConfig::get('app_doAuth_remember_key_expiration_age', 356 * 24 * 3600);
       // make key as a cookie
       $remember_cookie = sfConfig::get('app_doAuth_remember_cookie_name', 'doRemember');
       sfContext::getInstance()->getResponse()->setCookie($remember_cookie, $hash, time() + $expiration_age);
@@ -149,7 +149,7 @@ class doAuthSecurityUser extends sfBasicSecurityUser
     $this->user = null;
     $this->clearCredentials();
     $this->setAuthenticated(false);
-    $expiration_age = sfConfig::get('app_doAuth_remember_key_expiration_age', 15 * 24 * 3600);
+    $expiration_age = sfConfig::get('app_doAuth_remember_key_expiration_age', 356 * 24 * 3600);
     $remember_cookie = sfConfig::get('app_doAuth_remember_cookie_name', 'doRemember');
     sfContext::getInstance()->getResponse()->setCookie($remember_cookie, '', time() - $expiration_age);
     $this->dispatcher->notify(new sfEvent($this, 'user.signed_out'));
@@ -176,6 +176,18 @@ class doAuthSecurityUser extends sfBasicSecurityUser
     }
 
     return $this->user;
+  }
+
+  /**
+   * Returns the unique identifier for user. Typically it is id field in User model
+   *
+   * @return <type>
+   *
+   */
+
+  public function getUserId() {
+    return  $this->getAttribute('user_id','','doUser');
+
   }
 
   /**

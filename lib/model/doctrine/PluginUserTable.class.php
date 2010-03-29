@@ -15,7 +15,7 @@ class PluginUserTable extends Doctrine_Table {
     return $query->fetchOne();
   }
 
-  public static function getAuthenticatedUser($username, $password, $active = true)
+  public function getAuthenticatedUser($username, $password, $active = true)
   {
     $user = $this->retrieveByUsername($username, $active);
 
@@ -33,7 +33,7 @@ class PluginUserTable extends Doctrine_Table {
           throw new sfException(sprintf('The algorithm "%s" is not callable.', $algorithmAsStr));
         }
 
-        $is_ok = ($this->getPassword() == call_user_func_array($algorithm, array($this->getSalt().$password)));
+        $is_ok = ($user->getPassword() == call_user_func_array($algorithm, array($user->getSalt().$password)));
       }
       if ($is_ok) return $user;
     }

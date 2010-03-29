@@ -45,7 +45,7 @@ class doAuthMailer {
       sfConfig::get('app_doAuth_email_from','mailer@'.$controller->getRequest()->getHost()),
       array($user->getEmail() => $user->getUsername()),
       $subject,
-      $controller->getPartial(sfConfig::get('app_doAuth_email_module',$controller->getModuleName()).'/mail_registration', array('user'=> $controller->user, 'password'=> $controller->getUser()->getAttribute('password',null,'doUser'))),'text/plain');
+      $controller->getPartial(sfConfig::get('app_doAuth_email_module',$controller->getModuleName()).'/mail_registration', array('user'=> $controller->user, 'password'=> $event['password'])),'text/plain');
   }
 
   public static function sendPasswordRequest(sfController $controller, User $user) {

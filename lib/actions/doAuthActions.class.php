@@ -31,7 +31,7 @@ class doAuthActions extends sfActions {
 
       $module = sfConfig::get('sf_login_module');
       if ($this->getModuleName() != $module) {
-        $this->getLogger()->warning('User is accessing signin action which is currently not configured in settings.yml. Please secure this action, or update configuration');
+        $this->getLogger()->warning('User is accessing signin action which is currently not configured in settings.yml. Please secure this action or update configuration');
       }
     }
   }
@@ -48,6 +48,9 @@ class doAuthActions extends sfActions {
   public function executeRegister(sfWebRequest $request) {
 
     $this->form = new RegisterUserForm();
+
+    $this->dispatcher->notify(new sfEvent($this, 'user.pre_register'));
+
     if ($request->isMethod('post')) {
       $this->form->bind($request->getParameter('user'));
       if ($this->form->isValid()) {
@@ -56,17 +59,20 @@ class doAuthActions extends sfActions {
         $user->setPassword($this->form->getValue('password'));
         $user->save();
 
-        $this->getUser()->setAttribute('password',$this->form->getValue('password'),'doUser');
         $this->user = $user;
 
-        $this->dispatcher->notify(new sfEvent($this, 'user.registered'));
+        $this->dispatcher->notify(new sfEvent($this, 'user.registered',array('password'=> $this->form->getValue('password'))));
 
         if (!sfConfig::get('app_doAuth_activation',false)) {
           $user->setIsActive(1);
           $user->save();
-          $this->freshSignin();
+          $this->firstSignin();
         }
 
+        if ($params = sfConfig::get('app_doAuth_register_forward')) {
+          list($module, $action) = $params;
+          $this->forward($module, $action);
+        }
         $this->redirect(sfConfig::get('app_doAuth_register_redirect','@homepage'));
       }
     }
@@ -93,7 +99,7 @@ class doAuthActions extends sfActions {
     $this->dispatcher->notify(new sfEvent($this, 'user.activated'));
 
     $this->getUser()->getAttributeHolder()->removeNamespace('doUser');
-    $this->freshSignin();
+    $this->firstSignin();
 
     $this->redirect(sfConfig::get('app_doAuth_register_redirect','@homepage'));
   }
@@ -138,9 +144,9 @@ class doAuthActions extends sfActions {
    * Automaticaly signs in current user after registration 
    */
 
-  protected function freshSignin() {
+  protected function firstSignin() {
     
-    if (sfConfig::get('app_doAuth_register_sign_in',true)) {
+    if (sfConfig::get('app_doAuth_register_signin',true)) {
       $this->getUser()->signIn($this->user);
       $this->getUser()->setFlash('notice','Congratulations! You are now registered.');
     } else {

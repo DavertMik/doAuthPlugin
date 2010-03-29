@@ -27,9 +27,6 @@ User:
     name_idx:
       fields: [username]
       unique: true
-    email_idex:
-      fields: [email]
-      unique: true
 
 UserActivationCode:
   actAs: [Timestampable]

@@ -4,40 +4,38 @@ all:
     algorithm_callable: sha1
     # function for delegating password check
     check_password_callable: false
-    # coookie 
-    remember_cookie:
-      name: doRemember
+    # coookie
+    remember_cookie_name: doRemember
       # expiration time (in secs), currently 1 year
-      expiration_age: 31536000
-      
-    register:
-      # where to redirect valid user after registration
-      redirect_path: '@homepage'
-      # auto sign in after registration
-      sign_in: true
-      
+    remember_cookie_expiration_age: 31536000
+    
     # use user activation
     activation: false
+    # where to redirect after request for password reset
+    reset_password_url: '@homepage'
+    # signin redirect
+    signin_url: '@homepage'
+    #signout url
+    signout_url: '@homepage'
 
-    reset_password:
-      # where to redirect after request for password reset
-      url: '@homepage'
 
-    email:
-      # activate by email if activation is on
-      activation: true
-      # send registration notification
-      registration: true
-      # sender email
-      from: mailer@currenthost.com
-      # module where email partials are stored.
-      # default is module from controller
-      module: false
 
-    signin:
-      # signin redirect
-      url: '@homepage'
-
-    signout:
-      #signout url
-      url: '@homepage'
+  doAuth_register:
+    # forward registration to next module
+    # syntax: [module, action]
+    forward: ~
+    # or redirect to current path
+    redirect_path: '@homepage'
+    # auto sign in after registration
+    signin: true
+      
+  doAuth_email:
+    # activate by email if activation is on
+    activation: true
+    # send registration notification
+    registration: true
+    # sender email
+    from: mailer@currenthost.com
+    # module where email partials are stored.
+    # default is module from controller
+    module: false
