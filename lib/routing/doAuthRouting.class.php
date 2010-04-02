@@ -21,6 +21,7 @@ class doAuthRouting
     // preprend our routes
     $r->prependRoute('signin', new sfRoute('/login', array('module' => 'baseAuth', 'action' => 'signin')));
    	$r->prependRoute('signout', new sfRoute('/logout', array('module' => 'baseAuth', 'action' => 'signout')));
+    $r->prependRoute('register', new sfRoute('/register', array('module' => 'baseAuth', 'action' => 'register')));
    	$r->prependRoute('password', new sfRoute('/request_password', array('module' => 'baseAuth', 'action' => 'password','wildcard'=> true)));
 
     if (sfConfig::get('app_doAuth_activation',false)) {
