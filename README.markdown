@@ -40,22 +40,22 @@ Access your user model from a class User.
 * creating a user (example)
 
         [php]
-      $user = new User();
-      $user->setUsername('davert');
-      $user->setPassword('symfony');
-      $user->setEmail('doAuth843@davert.mail.ua');
-      $user->save();
+        $user = new User();
+        $user->setUsername('davert');
+        $user->setPassword('symfony');
+        $user->setEmail('doAuth843@davert.mail.ua');
+        $user->save();
 
 * accessing user session class (example in controller)
 
         [php]
-      $user = $this->getUser();
-      // retrieve current user object
-      $user->getAccount();
-      // get user Id
-      $user->getUserId();
-      // check if user is admin or superadmin
-      $user->isAdmin();
+        $user = $this->getUser();
+        // retrieve current user object
+        $user->getAccount();
+        // get user Id
+        $user->getUserId();
+        // check if user is admin or superadmin
+        $user->isAdmin();
 
 
 Customization
@@ -68,20 +68,20 @@ Customization
 * let userActions extend the doAuthActions class.
 
         [php]
-      class userActions extends doAuthActions
+        class userActions extends doAuthActions
 
 * userActions now implements common actions: signin, signout, register, activate, reset password.
 * disable [baseAuth] module in settings.yml if it is enabled.
 * activate the standard routes in your frontendConfiguration class:
 
         [php]
-      class frontendConfiguration extends sfApplicationConfiguration
-      {
-        public function configure()
+        class frontendConfiguration extends sfApplicationConfiguration
         {
-          $this->dispatcher->connect('routing.load_configuration', array('doAuthRouting', 'listenToRoutingLoadConfigurationEvent'));
+          public function configure()
+          {
+            $this->dispatcher->connect('routing.load_configuration', array('doAuthRouting', 'listenToRoutingLoadConfigurationEvent'));
+          }
         }
-     }
 
 * or create your own routes. Use a sample file located in plugins/doAuth/config/routing.samlpe.yml
 * write your own email templates. Copy all _mail_* partials from plugins/doAuth/modules/baseAuth/templates to your user/templates and rewrite them.
@@ -90,7 +90,7 @@ Registration
 ------------
 You can extend registration form in your own way. Here are 2 typical cases.
 
-To add custom widgets or validators to RegisterForm. Create new RegisterUserForm class in your lib/forms folder.
+* To add custom widgets or validators to RegisterForm. Create new RegisterUserForm class in your lib/forms folder.
 
         [php]
         class RegisterUserForm extends BaseRegisterUserForm {
