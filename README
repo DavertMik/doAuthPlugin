@@ -1,10 +1,10 @@
 doAuthPlugin
 -------------
-Inspired by sfGuardPlugin an easy-to-use new authorisationsystem. doAuth is ready to work out of the box with just a few configuration changes. It takes all the common user functionality - User authorisation by login and password, registration, activation by email, password reset. If you don't need sfGuard permissions system but a simple user module that works, you should try doAuth. Great for a new symfony 1.4 projects.
+Inspired by sfGuardPlugin an easy-to-use new authorization system. doAuth is ready to work out of the box with just a few configuration changes. It takes all the common user functionality - User authorisation by login and password, registration, activation by email, password reset. If you don't need sfGuard permissions system but a simple user module that works, you should try doAuth. Great for a new symfony 1.4 projects.
 
 Features
 --------
-* All common user actions: authorisation, registration, activation, password reset works out the box.
+* All common user actions: authorization, registration, activation, password reset works out the box.
 * Developer friendly: only 2 tables, model named 'User' that can be extended with Doctrine inheritance.
 * Highly configurable and customizable. You can extend classes, add your event handlers or just edit configuration to create custom behavior. 
 * Standard emails are sent on registration, activation and password requests.
@@ -30,7 +30,33 @@ Installation
   * Enable [baseAuth] module in setting.yml of your frontend or skip it and start the customization.
   
 You are ready to use. Try to acces /register, /login, /logout routes.    				
-By default doAuth automaticaly signs user is on registration and sends email with username and password. 
+By default doAuth automaticaly signs user is on registration and sends email with username and password.
+
+Usage
+-----
+Access your user model from a class User.
+(well, is very common thing, but should be noted for sfGuardUser users)
+
+* creating a user (example)
+
+    [php]
+    $user = new User();
+    $user->setUsername('davert');
+    $user->setPassword('symfony');
+    $user->setEmail('doAuth843@davert.mail.ua');
+    $user->save();
+
+* accessing user session class (example in controller)
+
+    [php]
+    $user = $this->getUser();
+    // retrieve current user object
+    $user->getAccount();
+    // get user Id
+    $user->getUserId();
+    // check if user is admin or superadmin
+    $user->isAdmin();
+
 
 Customization
 -------------
@@ -58,8 +84,8 @@ Customization
 * or create your own routes. Use a sample file located in plugins/doAuth/config/routing.samlpe.yml
 * write your own email templates. Copy all _mail_* partials from plugins/doAuth/modules/baseAuth/templates to your user/templates and rewrite them.
 
-Registration:
--------------
+Registration
+------------
 You can extend registration form in your own way. Here are 2 typical cases.
 
 To add custom widgets or validators to RegisterForm. Create new RegisterUserForm class in your lib/forms folder.
@@ -157,7 +183,7 @@ Events
 Here is a list of all events that are fired by doAuthPlugin:
 
 * user.signed_in - on sign in. Subject is doAuthSecurityUser class.
-* user.pre_register - runs before the registration starts. Can be overriden by inheritence, but can be used as an event. Subject - controller. Refer to Registration sections on usage of this event.
+* user.pre_register - runs before the registration starts. Can be overriden by inheritence. Subject - controller. Refer to Registration sections on usage of this event.
 * user.registered - on succesfully completed registration. Subject is controller. 
 * user.activated - on user succesfull activation. Needs activation to be turned on.
 
@@ -167,7 +193,7 @@ Contribute
 ----------
 You can always fork this project on Github. 
 http://github.com/DavertMik/doAuthPlugin
-Bugfixed, enhancments, bugreports are always welcome.
+Bugfixes, enhancments, bugreports are always welcome.
 	
 TODO
 ----
