@@ -7,8 +7,7 @@ all:
     # coookie
     remember_cookie_name: doRemember
       # expiration time (in secs), currently 1 year
-    remember_cookie_expiration_age: 31536000
-    
+    remember_cookie_expiration_age: 31536000    
     # use user activation
     activation: false
     # where to redirect after request for password reset
@@ -17,6 +16,8 @@ all:
     signin_url: '@homepage'
     #signout url
     signout_url: '@homepage'
+    # register standard routes
+    routes_register: true
 
 
 

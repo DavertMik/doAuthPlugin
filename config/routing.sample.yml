@@ -1,0 +1,19 @@
+signin:
+  url: /login
+  param: { module: user, action: signin }
+
+signout:
+  url: /logout
+  param: { module: user, action: signout }
+
+register:
+  url: /register
+  param: { module: user, action: register }
+
+password:
+  url: /reset_password
+  param: { module: user, action: password, wildcard: true }
+
+activation:
+  url: /activate/:code
+  param: { module: user, action: activate }
