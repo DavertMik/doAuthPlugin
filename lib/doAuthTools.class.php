@@ -1,8 +1,8 @@
 <?php
 
 /**
- * This library is very important to secure your users hashes and passwords.
- * Please, be sure, that you don't show Email, Password, Sault fields to public
+ * This library is very important to secure your users and their passwords.
+ * Please, be sure, that you don't show Email, Password, Salt fields to public
  * If you need you can update this algorithms by copying this class to your lib folder
  */
 

@@ -160,14 +160,14 @@ Use ['user.pre_register'] event to access registration action, get request param
           }
         }
 
-Passwords and Security
+Codes and Security
 ----------------------
 doAuthPlugin generates hashes for remember filter, activation code, password reset code and a new password for user on request.
 
 Here are the principles that doAuth follows to create user codes:
 * doAuth uses CSRF secret key to generate unique codes for every symfony site.
 * doAuth uses Salt, Email, Password fields from User record to generate codes.
-* doAuth uses md5 hash algorithm to create code from strings
+* doAuth uses md5 hash algorithm to create code from strings.
 * doAuth generates random 10-symbol length password from all latin characters upper and lowercase and numbers.
 
 If you are unhappy with provided methods, you can override them, following this instructions:
