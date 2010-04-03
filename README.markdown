@@ -35,19 +35,19 @@ Installation
 
         }
 
-  * Enable [baseAuth] module in setting.yml of your frontend or skip it and start the customization.
-
   * Optionally add the &quot;Remember Me&quot; filter to `filters.yml` above the security filter:
 
         remember_me:
           class: doAuthRememberMeFilter
 
+  * Enable [baseAuth] module in setting.yml of your frontend or skip it and start the customization.
+
   * Change the default login and secure modules in `settings.yml`
 
-        login_module:           sfGuardAuth
+        login_module:           baseAuth
         login_action:           signin
 
-        secure_module:          sfGuardAuth
+        secure_module:          baseAuth
         secure_action:          secure
 
 You are ready to use. Try to access /register, /login, /logout routes.
