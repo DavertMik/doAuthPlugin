@@ -31,7 +31,7 @@ abstract class PluginUser extends BaseUser
 
     if (!$salt = $this->getSalt())
     {
-      $salt = md5(mt_rand(100000, 999999).$this->getUsername());
+      $salt = sha1(uniqid(mt_rand(), true));
       $this->setSalt($salt);
     }
     $modified = $this->getModified();

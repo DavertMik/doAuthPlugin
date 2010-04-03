@@ -18,7 +18,7 @@ class doAuthTools {
   
 
   public static function rememberHash(User $user) {
-    return md5($user->getId().sfConfig::get('sf_csrf_secret','').$user->getEmail().substr($user->getSalt().$user->getPassword(),20,30));
+    return sha1($user->getId().sfConfig::get('sf_csrf_secret','').$user->getEmail().substr($user->getSalt().$user->getPassword(),20,30));
   }
 
   /**
@@ -30,7 +30,7 @@ class doAuthTools {
    */
 
   public static function activationCode(User $user) {
-    return md5(mt_rand(100000,999999).sfConfig::get('sf_csrf_secret','').$user->getEmail());
+    return sha1(mt_rand(10000,99999).sfConfig::get('sf_csrf_secret','').$user->getEmail().rand(10000,99999));
   }
 
   /**
@@ -42,7 +42,7 @@ class doAuthTools {
    */
 
   public static function passwordResetCode(User $user) {
-    return md5(substr($user->getSalt(),10,10).sfConfig::get('sf_csrf_secret','').$user->getEmail().$user->getPassword());
+    return sha1(substr($user->getSalt(),10,10).sfConfig::get('sf_csrf_secret','').$user->getEmail().$user->getPassword());
   }
 
   /**
@@ -54,7 +54,12 @@ class doAuthTools {
 
 
   public static function generatePassword() {
-    $string = uniqid(mt_rand(), true);
+    $pool   = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    for ($i = 1; $i <= 10; $i++)
+    {
+      mt_srand();
+      $string .= substr($pool, mt_rand(0, 61), 1);
+    }
 
     return $string;
   }
