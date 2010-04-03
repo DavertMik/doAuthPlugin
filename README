@@ -27,7 +27,28 @@ Installation
 
         $ symfony doctrine:insert-sql
 
+  * make myUser class typically located in app/frontend/lib to extend doAuthSecurityUser:
+
+        [php]
+        class myUser extends doAuthSecurityUser
+        {
+
+        }
+
   * Enable [baseAuth] module in setting.yml of your frontend or skip it and start the customization.
+
+  * Optionally add the &quot;Remember Me&quot; filter to `filters.yml` above the security filter:
+
+        remember_me:
+          class: doAuthRememberMeFilter
+
+  * Change the default login and secure modules in `settings.yml`
+
+        login_module:           sfGuardAuth
+        login_action:           signin
+
+        secure_module:          sfGuardAuth
+        secure_action:          secure
 
 You are ready to use. Try to access /register, /login, /logout routes.
 By default doAuth automaticaly signs user is on registration and sends email with username and password.
@@ -85,6 +106,13 @@ Customization
 
 * or create your own routes. Use a sample file located in plugins/doAuth/config/routing.samlpe.yml
 * write your own email templates. Copy all _mail_* partials from plugins/doAuth/modules/baseAuth/templates to your user/templates and rewrite them.
+* don't forget to set symfony default actions, like we did for baseAuth module
+
+        login_module:           user
+        login_action:           signin
+
+        secure_module:          user
+        secure_action:          secure
 
 Registration
 ------------
@@ -132,6 +160,17 @@ Use ['user.pre_register'] event to access registration action, get request param
           }
         }
 
+Passwords and Security
+----------------------
+doAuth currently generates very simple md5 hashes for activation, password, remember filter. That's very very bad and certanly will be changed in next versions. Right now it is It is strongly recommended to change generation algorithms to your own.
+But even when a new version of doAuth with better algorithms will be released, this tip will be useful.
+
+* To update currently used algorithms, please copy doAuthTools.class.php located in plugins/doAuth/lib to your project lib folder.
+* Rewrite all functions pressented there to your own
+* Clear symfony cache (yep, `symfony cc` thing)
+* Now doAuth fully depends on your own implementation of this class.
+
+(Thanks to Andrei Dziahel for pointing to this issue)
 
 Configuration
 -------------

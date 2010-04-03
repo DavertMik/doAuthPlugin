@@ -1,4 +1,4 @@
-<?php use_helper('I18n') ?>
+<?php use_helper('I18N') ?>
 <?php echo form_tag('user/register') ?>
 <table>
 <?php echo $form ?>
