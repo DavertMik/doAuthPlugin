@@ -1,7 +1,9 @@
 <?php
 
 /**
- * additional user tools
+ * This library is very important to secure your users hashes and passwords.
+ * Please, be sure, that you don't show Email, Password, Sault fields to public
+ * If you need you can update this algorithms by copying this class to your lib folder
  */
 
 class doAuthTools {
@@ -13,9 +15,10 @@ class doAuthTools {
    * @return string
    *
    */
+  
 
   public static function rememberHash(User $user) {
-    return md5($user->getId().'-'.$user->getUsername().substr($user->getPassword(),0,5));
+    return md5($user->getId().sfConfig::get('sf_csrf_secret','').$user->getEmail().substr($user->getSalt().$user->getPassword(),20,30));
   }
 
   /**
@@ -27,7 +30,7 @@ class doAuthTools {
    */
 
   public static function activationCode(User $user) {
-    return md5($user->getCreatedAt().time().$user->getUsername().substr($user->getUsername(),0,5));
+    return md5(rand(10000,99999).sfConfig::get('sf_csrf_secret','').$user->getEmail().rand(10000,99999));
   }
 
   /**
@@ -39,12 +42,25 @@ class doAuthTools {
    */
 
   public static function passwordResetCode(User $user) {
-    return md5($user->getSalt().$user->getUsername().$user->getCreatedAt());
+    return md5(substr($user->getSalt(),10,10).sfConfig::get('sf_csrf_secret','').$user->getEmail().$user->getPassword());
   }
+
+  /**
+   * Returns a new password on user request
+   *
+   * @return string
+   *
+   */
 
 
   public static function generatePassword() {
-    return substr(md5(rand(1000,9999).time()),0,8);
+    $pool   = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    for ($i = 1; $i <= 10; $i++)
+    {
+      $string .= substr($pool, rand(0, 61), 1);
+    }
+
+    return $string;
   }
 }
 

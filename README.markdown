@@ -162,15 +162,24 @@ Use ['user.pre_register'] event to access registration action, get request param
 
 Passwords and Security
 ----------------------
-doAuth currently generates very simple md5 hashes for activation, password, remember filter. That's very very bad and certanly will be changed in next versions. Right now it is It is strongly recommended to change generation algorithms to your own.
-But even when a new version of doAuth with better algorithms will be released, this tip will be useful.
+doAuthPlugin generates hashes for remember filter, activation code, password reset code and a new password for user on request.
 
-* To update currently used algorithms, please copy doAuthTools.class.php located in plugins/doAuth/lib to your project lib folder.
+Here are the principles that doAuth follows to create user codes:
+* doAuth uses CSRF secret key to generate unique codes for every symfony site.
+* doAuth uses Salt, Email, Password fields from User record to generate codes.
+* doAuth uses md5 hash algorithm to create code from strings
+* doAuth generates random 10-symbol length password from all latin characters upper and lowercase and numbers.
+
+If you are unhappy with provided methods, you can override them, following this instructions:
+
+* To update currently used algorithms, please copy doAuthTools.class.php located in plugins/doAuthPlugin/lib to your project lib folder.
 * Rewrite all functions pressented there to your own
 * Clear symfony cache (yep, `symfony cc` thing)
 * Now doAuth fully depends on your own implementation of this class.
 
-(Thanks to Andrei Dziahel for pointing to this issue)
+If you are very unhappy with current methods and very happy with your own, please share your implementation on Github. You can fork the project here: http://github.com/DavertMik/doAuthPlugin
+
+(Thanks to Andrei Dziahel and Laurent Bachelier)
 
 Configuration
 -------------
