@@ -30,7 +30,7 @@ class doAuthTools {
    */
 
   public static function activationCode(User $user) {
-    return sha1(mt_rand(10000,99999).sfConfig::get('sf_csrf_secret','').$user->getEmail().rand(10000,99999));
+    return sha1(mt_rand(10000,99999).sfConfig::get('sf_csrf_secret','').$user->getEmail());
   }
 
   /**
