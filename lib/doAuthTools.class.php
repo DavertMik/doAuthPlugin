@@ -30,7 +30,7 @@ class doAuthTools {
    */
 
   public static function activationCode(User $user) {
-    return md5(rand(10000,99999).sfConfig::get('sf_csrf_secret','').$user->getEmail().rand(10000,99999));
+    return md5(mt_rand(100000,999999).sfConfig::get('sf_csrf_secret','').$user->getEmail());
   }
 
   /**
@@ -54,11 +54,7 @@ class doAuthTools {
 
 
   public static function generatePassword() {
-    $pool   = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    for ($i = 1; $i <= 10; $i++)
-    {
-      $string .= substr($pool, rand(0, 61), 1);
-    }
+    $string = uniqid(mt_rand(), true);
 
     return $string;
   }
