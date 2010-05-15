@@ -243,9 +243,9 @@ Basically 2 last events are used to send emails.
 Alternative to events (new in 0.9.5)
 ------------------------------------
 
-To hook up functionality you don't need to assign listeners to events. You can also rewrite this dummy methods in your controller.
+To extend user actions you don't have to assign listeners to events. You can also override this dummy methods in your controller.
 
-* preSignin - execiuted after the Signin form is created but before it was binded. Access for with $this->form
+* preSignin - executed after the Signin form is created but before it was binded. Access for with $this->form
 * postSignin - executed when the user signs in. You can use this method for redirection.
 * preRegister - executed when Registration for is created but not binded. Use $this->form to access the form.
 * postRegister - executed after the new user is created, but not activated.
@@ -274,4 +274,3 @@ Bugfixes, enhancements, bugreports are always welcome.
 TODO
 ----
 * test everything, cover with functional tests
-* create tasks to create and promote user
