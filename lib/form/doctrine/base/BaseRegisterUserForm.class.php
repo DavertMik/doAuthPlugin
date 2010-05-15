@@ -4,8 +4,6 @@ class BaseRegisterUserForm extends PluginUserForm {
 
   public function configure()
   {
-    parent::configure();
-
     $this->setWidget('password',  new sfWidgetFormInputPassword());
     $this->setWidget('repeat_password',  new sfWidgetFormInputPassword());
 
@@ -17,7 +15,7 @@ class BaseRegisterUserForm extends PluginUserForm {
       'repeat_password' => new sfValidatorString(array('required'=> true)),
     ));
 
-    $this->useFields(array('username','password','repeat_password','email'));
+    unset($this['id'],$this['is_active'],$this['is_super_admin'],$this['last_login'],$this['created_at'],$this['updated_at']);
 
     $this->validatorSchema->setPostValidator(new sfValidatorAnd(array(
       new sfValidatorSchemaCompare('password', '==', 'repeat_password'),

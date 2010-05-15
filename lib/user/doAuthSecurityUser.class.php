@@ -115,6 +115,8 @@ class doAuthSecurityUser extends sfBasicSecurityUser
    */
   public function signIn($user, $remember = false, $con = null)
   {
+    // we remove a non-user storage
+    $this->getAttributeHolder()->removeNamespace('doPreUser');
     // signin
     $this->setAttribute('user_id', $user->getId(), 'doUser');
     $this->setAuthenticated(true);

@@ -8,12 +8,16 @@ class doAuthActions extends sfActions {
     }
 
     $this->form = new SigninForm();
+    
+    $this->preSignin($request);
 
     if ($request->isMethod('post')) {
       $this->form->bind($request->getParameter('signin'));
       if ($this->form->isValid()) {
         $values = $this->form->getValues();
         $this->getUser()->signin($values['user'], array_key_exists('remember', $values) ? $values['remember'] : false);
+
+        $this->postSignin($request);
 
         // always redirect to a URL set in app.yml
         // or to the referer
@@ -50,9 +54,11 @@ class doAuthActions extends sfActions {
     $this->form = new RegisterUserForm();
 
     $this->dispatcher->notify(new sfEvent($this, 'user.pre_register'));
+    
+    $this->preRegister($request);
 
     if ($request->isMethod('post')) {
-      $this->form->bind($request->getParameter('user'));
+      $this->form->bind($request->getParameter('user'),$request->getParameter('user'));
       if ($this->form->isValid()) {
         $this->form->save();
         $user = $this->form->getObject();
@@ -62,11 +68,14 @@ class doAuthActions extends sfActions {
         $this->user = $user;
 
         $this->dispatcher->notify(new sfEvent($this, 'user.registered',array('password'=> $this->form->getValue('password'))));
+        $this->postRegister($request);
 
         if (!sfConfig::get('app_doAuth_activation',false)) {
           $user->setIsActive(1);
           $user->save();
           $this->firstSignin();
+        } else {
+          $this->getUser()->setFlash('notice','Please check your email to finish registration process');
         }
 
         if ($params = sfConfig::get('app_doAuth_register_forward')) {
@@ -79,15 +88,14 @@ class doAuthActions extends sfActions {
   }
 
   public function executeActivate(sfWebRequest $request) {
-         
+
+    $this->preActivate($request);
+
     $activation = Doctrine::getTable('UserActivationCode')->createQuery('a')->
       innerJoin('a.User u')->
       where('a.code = ?', $request->getParameter('code'))->fetchOne();
 
     $this->forward404Unless($activation,'wrong activation code used');
-
-    // check stored in session activation data
-    $this->forward404Unless($this->getUser()->getAttribute('activation_code',null,'doUser') == $request->getParameter('code'),'wrong session activation code');   
 
     $user = $activation->getUser();
     $user->setIsActive(1);
@@ -96,7 +104,8 @@ class doAuthActions extends sfActions {
 
     $this->user = $user;
 
-    $this->dispatcher->notify(new sfEvent($this, 'user.activated'));
+    $this->dispatcher->notify(new sfEvent($this, 'user.activated'));    
+    $this->postActivate($request);
 
     $this->getUser()->getAttributeHolder()->removeNamespace('doUser');
     $this->firstSignin();
@@ -130,7 +139,7 @@ class doAuthActions extends sfActions {
     $this->form = new ResetPasswordForm();
 
     if ($request->isMethod('post')) {
-      $this->form->bind($request->getParameter('password_reset'));
+      $this->form->bind($request->getParameter('reset_password'));
       if ($this->form->isValid()) {
         doAuthMailer::sendPasswordRequest($this,$user);
         $this->getUser()->setFlash('notice','You have requested a new password. Please, check your email and follow the instructions.');
@@ -144,16 +153,25 @@ class doAuthActions extends sfActions {
    * Automaticaly signs in current user after registration 
    */
 
-  protected function firstSignin() {
-    
+  protected function firstSignin()
+  {
     if (sfConfig::get('app_doAuth_register_signin',true)) {
       $this->getUser()->signIn($this->user);
       $this->getUser()->setFlash('notice','Congratulations! You are now registered.');
     } else {
       $this->getUser()->setFlash('notice','Congratulations! You are now registered. Please, sign in');
     }
-
   }
 
+  // use this methods in your class to extend a functionality
+
+  protected function preSignin(sfWebRequest $request) {}
+  protected function postSignin(sfWebRequest $request) {}
+
+  protected function preRegister(sfWebRequest $request) {}
+  protected function postRegister(sfWebRequest $request) {}
+
+  protected function preActivate(sfWebRequest $request) {}
+  protected function postActivate(sfWebRequest $request) {}
 
 }
