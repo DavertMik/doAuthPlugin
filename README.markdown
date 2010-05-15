@@ -240,6 +240,27 @@ overridden by inheritance. Subject - controller. Refer to Registration sections 
 
 Basically 2 last events are used to send emails.
 
+Alternative to events (new in 0.9.5)
+------------------------------------
+
+To hook up functionality you don't need to assign listeners to events. You can also rewrite this dummy methods in your controller.
+
+* preSignin - execiuted after the Signin form is created but before it was binded. Access for with $this->form
+* postSignin - executed when the user signs in. You can use this method for redirection.
+* preRegister - executed when Registration for is created but not binded. Use $this->form to access the form.
+* postRegister - executed after the new user is created, but not activated.
+* preActivate - executed before the Activate action runs
+* postActivate - executed when user is activated but not signed in
+
+Tasks (new in 0.9.5)
+-------
+
+Added several tasks for user management
+
+* user:create username password - creates user
+* user:promote username - promotes a user to superadmin
+* user:ban - deactivates (bans) user
+
 I18n
 ----
 All the messages and templates are I18n-ready. Please check doAuthMailer class to add translations to email subjects and doAuthActions to translate flash messages
