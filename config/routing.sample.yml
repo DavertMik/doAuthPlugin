@@ -12,7 +12,7 @@ register:
 
 password:
   url: /reset_password
-  param: { module: user, action: password, wildcard: true }
+  param: { module: user, action: resetPassword, wildcard: true }
 
 activation:
   url: /activate/:code

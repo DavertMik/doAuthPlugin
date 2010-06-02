@@ -55,10 +55,11 @@ class doAuthTools {
 
   public static function generatePassword() {
     $pool   = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    $string = '';
     for ($i = 1; $i <= 10; $i++)
     {
       mt_srand();
-      $string .= substr($pool, mt_rand(0, 61), 1);
+      $string .= $pool{mt_rand(0, 61)};
     }
 
     return $string;

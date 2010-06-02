@@ -48,7 +48,7 @@ class doAuthMailer {
       $controller->getPartial(sfConfig::get('app_doAuth_email_module',$controller->getModuleName()).'/mail_registration', array('user'=> $controller->user, 'password'=> $password)),'text/plain');
   }
 
-  public static function sendPasswordRequest(sfController $controller, User $user) {
+  public static function sendPasswordRequest(userActions $controller, User $user) {
 
     $subject = sfConfig::get('sf_i18n') ? $controller->getContext()->getI18N()->__('Password reset') :'Password reset';
 
@@ -58,10 +58,10 @@ class doAuthMailer {
       sfConfig::get('app_doAuth_email_from','mailer@'.$controller->getRequest()->getHost()),
       array($user->getEmail() => $user->getUsername()),
       $subject,
-      $controller->getPartial(sfConfig::get('app_doAuth_email_module',$controller->getModuleName()).'/mail_reset_password', array('user'=> $controller->user, 'code'=> $code)),'text/plain');
+      $controller->getPartial(sfConfig::get('app_doAuth_email_module',$controller->getModuleName()).'/mail_reset_password', array('user'=> $user, 'code'=> $code)),'text/plain');
   }
 
-  public static function sendNewPassword(sfController $controller, User $user, $password) {
+  public static function sendNewPassword(userActions $controller, User $user, $password) {
 
     $subject = sfConfig::get('sf_i18n') ? $controller->getContext()->getI18N()->__('Your new password') :'Your new password';
 
@@ -69,8 +69,9 @@ class doAuthMailer {
       sfConfig::get('app_doAuth_email_from','mailer@'.$controller->getRequest()->getHost()),
       array($user->getEmail() => $user->getUsername()),
       $subject,
-      $controller->getPartial(sfConfig::get('app_doAuth_email_module',$controller->getModuleName()).'/mail_new_password', array('user'=> $controller->user, 'password'=> $password)),'text/plain');
+      $controller->getPartial(sfConfig::get('app_doAuth_email_module',$controller->getModuleName()).'/mail_new_password', array('user'=> $user, 'password'=> $password)),'text/plain');
   }
+  
   
 }
 ?>
