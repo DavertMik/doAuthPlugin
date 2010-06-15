@@ -44,6 +44,8 @@ class doAuthActions extends sfActions {
   public function executeSignout($request) {
     $this->getUser()->signOut();
 
+    $this->postSignOut($request);
+
     $signoutUrl = sfConfig::get('app_doAuth_signout_url', $request->getReferer());
 
     $this->redirect('' != $signoutUrl ? $signoutUrl : '@homepage');
@@ -173,4 +175,5 @@ class doAuthActions extends sfActions {
   protected function preActivate(sfWebRequest $request) {}
   protected function postActivate(sfWebRequest $request) {}
 
+  protected function postSignOut(sfWebRequest $request) {}
 }
