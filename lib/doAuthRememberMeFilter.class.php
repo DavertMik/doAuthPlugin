@@ -20,7 +20,7 @@ class doAuthRememberMeFilter extends sfFilter
       if ($user)
       {
         if ($value[2] == doAuthTools::rememberHash($user)) {
-          $this->context->getUser()->signIn($q->fetchOne());
+          $this->context->getUser()->signIn($user);
         }       
       }
     }

@@ -9,6 +9,7 @@ class doAuthCreateUserTask extends sfBaseTask
   {
     $this->addArguments(array(
       new sfCommandArgument('username', sfCommandArgument::REQUIRED, 'The user name'),
+      new sfCommandArgument('email', sfCommandArgument::REQUIRED, 'The email address'),
       new sfCommandArgument('password', sfCommandArgument::REQUIRED, 'The password'),
     ));
 
@@ -24,7 +25,7 @@ class doAuthCreateUserTask extends sfBaseTask
     $this->detailedDescription = <<<EOF
 The [user:create] task creates a user:
 
-  [./symfony user:create davert password|INFO]
+  [./symfony user:create davert davert@example.com password|INFO]
 EOF;
   }
 
@@ -37,6 +38,7 @@ EOF;
 
     $user = new User();
     $user->setUsername($arguments['username']);
+    $user->setEmail($arguments['email']);
     $user->setPassword($arguments['password']);
     $user->setIsActive(true);
     $user->save();
